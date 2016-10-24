@@ -62,4 +62,8 @@ public class Booking {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public String getfDate() {
+		return fDate;
+	}
 }

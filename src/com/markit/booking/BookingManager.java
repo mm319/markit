@@ -15,4 +15,9 @@ public interface BookingManager {
 	 * date. If the room is not available, throw a suitable Exception. 
 	 */ 
 	public void addBooking(String guest, Integer room, Date date);
+	
+	/** 
+	 * Return a list of all the available room numbers for the given date 
+	 */ 
+	public Iterable<Integer> getAvailableRooms(Date date);
 }

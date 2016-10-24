@@ -2,6 +2,8 @@ package com.markit.booking;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,14 +27,18 @@ public class TestBooking {
 		Room room2 = new Room(101);
 		Room room3 = new Room(203);
 		Room room4 = new Room(102);
+		Room room5 = new Room(567);
+		
+		Room[] rooms = {room1,room2, room3, room4}; 
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		BookingManager bm = new MarkitBookingManager();
+		BookingManager bm = new MarkitBookingManager(rooms);
 		bm.addBooking(guest1.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest2.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest3.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest4.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
+		bm.addBooking(guest4.getLastName(), room5.getRoomNumber(), sdf.parse("2016-10-25"));
 		
 
 		Assert.assertFalse(bm.isRoomAvailable(room1.getRoomNumber(), sdf.parse("2016-10-25")));
@@ -40,5 +46,25 @@ public class TestBooking {
 		Assert.assertTrue(bm.isRoomAvailable(room2.getRoomNumber(), sdf.parse("2016-10-26")));
 		Assert.assertTrue(bm.isRoomAvailable(room3.getRoomNumber(), sdf.parse("2016-10-25")));
 		Assert.assertTrue(bm.isRoomAvailable(room4.getRoomNumber(), sdf.parse("2016-10-25")));
+		
+		Iterable<Integer> availableRooms = bm.getAvailableRooms(sdf.parse("2016-10-25"));
+		ArrayList<Integer> roomList = new ArrayList<Integer>();
+		Iterator<Integer> i = availableRooms.iterator();
+		
+		while(i.hasNext()) {
+			roomList.add(i.next());
+		}
+		
+		Assert.assertEquals(3, roomList.size());
+		
+		availableRooms = bm.getAvailableRooms(sdf.parse("2016-10-26"));
+		roomList = new ArrayList<Integer>();
+		i = availableRooms.iterator();
+		
+		while(i.hasNext()) {
+			roomList.add(i.next());
+		}
+		
+		Assert.assertEquals(4, roomList.size());
 	}
 }

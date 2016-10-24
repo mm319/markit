@@ -29,16 +29,18 @@ public class TestBooking {
 		Room room4 = new Room(102);
 		Room room5 = new Room(567);
 		
-		Room[] rooms = {room1,room2, room3, room4}; 
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		BookingManager bm = new MarkitBookingManager(rooms);
+		BookingManager bm = MarkitBookingManager.getInstance();
+		BookingManager bm1 = MarkitBookingManager.getInstance();
+		
 		bm.addBooking(guest1.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest2.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest3.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest4.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		bm.addBooking(guest4.getLastName(), room5.getRoomNumber(), sdf.parse("2016-10-25"));
+		
+		bm1.addBooking(guest3.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		
 
 		Assert.assertFalse(bm.isRoomAvailable(room1.getRoomNumber(), sdf.parse("2016-10-25")));
@@ -46,6 +48,7 @@ public class TestBooking {
 		Assert.assertTrue(bm.isRoomAvailable(room2.getRoomNumber(), sdf.parse("2016-10-26")));
 		Assert.assertTrue(bm.isRoomAvailable(room3.getRoomNumber(), sdf.parse("2016-10-25")));
 		Assert.assertTrue(bm.isRoomAvailable(room4.getRoomNumber(), sdf.parse("2016-10-25")));
+		Assert.assertTrue(bm1.isRoomAvailable(room4.getRoomNumber(), sdf.parse("2016-10-25")));
 		
 		Iterable<Integer> availableRooms = bm.getAvailableRooms(sdf.parse("2016-10-25"));
 		ArrayList<Integer> roomList = new ArrayList<Integer>();

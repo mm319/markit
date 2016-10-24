@@ -1,9 +1,11 @@
 package com.markit.booking;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.markit.booking.dto.Booking;
@@ -12,10 +14,10 @@ import com.markit.booking.dto.Room;
 
 public class MarkitBookingManager implements BookingManager {
 
-	private ConcurrentHashMap<Booking,Guest> bookingMap = new ConcurrentHashMap<Booking,Guest>();
-	private HashSet<Room> rooms;
+	private static ConcurrentHashMap<Booking,Guest> bookingMap = new ConcurrentHashMap<Booking,Guest>();
+	private static Set<Room> rooms = Collections.synchronizedSet(new HashSet<Room>());
 	
-	public MarkitBookingManager() {
+	private MarkitBookingManager() {
 		
 		rooms = new HashSet<Room>();
 		rooms.add(new Room(201));
@@ -24,13 +26,10 @@ public class MarkitBookingManager implements BookingManager {
 		rooms.add(new Room(102));
 	}
 	
-	public MarkitBookingManager(Room[] rooms) {
-		
-		this.rooms = new HashSet<Room>();
-		
-		for (Room r: rooms) {
-			this.rooms.add(r);
-		}
+	private static final MarkitBookingManager INSTANCE = new MarkitBookingManager();
+	
+	public static MarkitBookingManager getInstance() {
+		return INSTANCE;
 	}
 	
 	@Override
@@ -41,8 +40,7 @@ public class MarkitBookingManager implements BookingManager {
 		Booking b = new Booking(room, date);
 		
 		available = bookingMap.containsKey(b) ? false : true;
-		
-		//System.out.println(room +" availablity: " +available + " for " + b.getfDate());
+
 		return available;
 	}
 
@@ -78,6 +76,17 @@ public class MarkitBookingManager implements BookingManager {
 			}
 		}
 		return available;
+	}
+	
+	public static boolean addNewRoom(Room room) {
+		
+		boolean added = false;
+		
+		if (!rooms.contains(room)) {
+			rooms.add(room);
+		}
+		
+		return added;
 	}
 
 }

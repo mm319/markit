@@ -15,21 +15,30 @@ public class TestBooking {
 	@Test
 	public void tetsRoomAvailablity() throws ParseException {
 		
-		Guest guest = new Guest();
-		guest.setLastName("Bloggs");
-		guest.setFirstName("Joe");
+		//101 102 201 203
+		Guest guest1 = new Guest("Bloggs");
+		Guest guest2 = new Guest("Smith");
+		Guest guest3 = new Guest("Suzuki");
+		Guest guest4 = new Guest("Ali");
 		
-		Room room = new Room();
-		room.setRoomNumber(201);
+		Room room1 = new Room(201);
+		Room room2 = new Room(101);
+		Room room3 = new Room(203);
+		Room room4 = new Room(102);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		BookingManager bm = new MarkitBookingManager();
-		bm.addBooking(guest.getLastName(), room.getRoomNumber(), sdf.parse("2016-10-25"));
+		bm.addBooking(guest1.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
+		bm.addBooking(guest2.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
+		bm.addBooking(guest3.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
+		bm.addBooking(guest4.getLastName(), room1.getRoomNumber(), sdf.parse("2016-10-25"));
 		
-		Assert.assertFalse(bm.isRoomAvailable(201, sdf.parse("2016-10-25")));
-		Assert.assertTrue(bm.isRoomAvailable(201, sdf.parse("2016-10-26")));
-		
+
+		Assert.assertFalse(bm.isRoomAvailable(room1.getRoomNumber(), sdf.parse("2016-10-25")));
+		Assert.assertTrue(bm.isRoomAvailable(room1.getRoomNumber(), sdf.parse("2016-10-26")));
+		Assert.assertTrue(bm.isRoomAvailable(room2.getRoomNumber(), sdf.parse("2016-10-26")));
+		Assert.assertTrue(bm.isRoomAvailable(room3.getRoomNumber(), sdf.parse("2016-10-25")));
+		Assert.assertTrue(bm.isRoomAvailable(room4.getRoomNumber(), sdf.parse("2016-10-25")));
 	}
-	
 }

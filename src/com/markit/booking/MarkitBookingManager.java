@@ -54,12 +54,11 @@ public class MarkitBookingManager implements BookingManager {
 		
 		Booking b = new Booking(room, date);
 		Guest g = new Guest(guest);
+	
+		Guest v = bookingMap.putIfAbsent(b, g);
 		
-		if (! bookingMap.containsKey(b)) {
-			bookingMap.put(b, g);
-		} else {
+		if (v != null) 
 			System.out.println(guest +" cannot have the room as it is already booked by another guest");
-		}
 	}
 	
 	@Override
